@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: ht
+    active: gm
 
 ---
 spring:
@@ -14,6 +14,15 @@ hdfs:
 spark:
   path: spark://node1:7077
 
+streamingDatSever:
+  path: xx.xx.xx.xx
+
+mysql:
+  ip: sh-cynosdbmysql-grp-5tpsbo9c.sql.tencentcdb.com
+  username: flight_analysis_user
+  password: 123456azM
+  port: 26211
+  dbName: flight_analysis
 ---
 
 spring:
@@ -22,10 +31,19 @@ spring:
       on-profile: gm
 
 hdfs:
-  path: hdfs://192.168.88.131:8020
+  path: hdfs://192.168.145.131:9000
   username: root
 
 spark:
-  path: spark://192.168.88.131:7077
+  path: spark://192.168.145.131:7077
 
+streamingDataSever:
+  path: xx,xx.xx.xx
+
+mysql:
+  ip: sh-cynosdbmysql-grp-5tpsbo9c.sql.tencentcdb.com
+  username: flight_analysis_user
+  password: 123456azM
+  port: 26211
+  dbName: flight_analysis
 ---

@@ -28,7 +28,7 @@ class FlightAnalysisApplicationTests {
     @Test
     void contextLoads() throws URISyntaxException, IOException {
         FileSystem fs = hadoopConfig.getFs();
-        FSDataInputStream open = fs.open(new Path("/test/input/wordcount.txt"));
+        FSDataInputStream open = fs.open(new Path("/test/input/word.txt"));
         BufferedReader reader = new BufferedReader(new InputStreamReader(open));
         String lineTxt = "";
         StringBuffer sb = new StringBuffer();

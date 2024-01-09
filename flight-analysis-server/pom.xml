@@ -4,7 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>czu.bigdata</groupId>
     <artifactId>flight-analysis</artifactId>
+    <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
+    <modules>
+        <module>streaming_server</module>
+    </modules>
     <name>flight-analysis</name>
     <description>flight-analysis</description>
     <properties>
@@ -12,12 +16,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.6.13</spring-boot.version>
-        <scala.version>2.12.10</scala.version>
-        <kafka.version>2.4.1</kafka.version>
-        <spark.version>3.1.2</spark.version>
-        <hadoop.version>3.3.0</hadoop.version>
-        <hbase.version>2.1.0</hbase.version>
-        <zookeeper.version>3.4.6</zookeeper.version>
+        <scala.version>2.12.17</scala.version>
+        <kafka.version>3.5.1</kafka.version>
+        <spark.version>3.4.1</spark.version>
+        <hadoop.version>3.3.5</hadoop.version>
+        <hbase.version>2.14.17</hbase.version>
+        <mysql.version>5.1.49</mysql.version>
+        <zookeeper.version>3.8.3</zookeeper.version>
     </properties>
     <dependencies>
         <dependency>
@@ -47,11 +52,11 @@
         </dependency>
 
         <!-- Kafka依赖 -->
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka_2.12</artifactId>
-            <version>${kafka.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.kafka</groupId>-->
+<!--            <artifactId>kafka_2.12</artifactId>-->
+<!--            <version>${kafka.version}</version>-->
+<!--        </dependency>-->
 
         <!-- Hadoop依赖 -->
         <dependency>
@@ -82,17 +87,17 @@
             </exclusions>
         </dependency>
 
-        <!-- Hbase依赖 -->
-        <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-client</artifactId>
-            <version>${hbase.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-server</artifactId>
-            <version>${hbase.version}</version>
-        </dependency>
+<!--        &lt;!&ndash; Hbase依赖 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.hbase</groupId>-->
+<!--            <artifactId>hbase-client</artifactId>-->
+<!--            <version>${hbase.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.hbase</groupId>-->
+<!--            <artifactId>hbase-server</artifactId>-->
+<!--            <version>${hbase.version}</version>-->
+<!--        </dependency>-->
 
         <!-- Spark依赖 -->
         <dependency>
@@ -102,11 +107,11 @@
         </dependency>
 
         <!-- Spark Streaming依赖 -->
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming_2.12</artifactId>
-            <version>${spark.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.spark</groupId>-->
+<!--            <artifactId>spark-streaming_2.12</artifactId>-->
+<!--            <version>${spark.version}</version>-->
+<!--        </dependency>-->
 
 <!--        &lt;!&ndash; Spark Streaming整合Flume 依赖&ndash;&gt;-->
 <!--        <dependency>-->
@@ -122,15 +127,11 @@
 <!--        </dependency>-->
 
         <!-- Spark Streaming整合kafka依赖-->
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming-kafka-0-10_2.12</artifactId>
-            <version>${spark.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+            <version>3.5</version>
         </dependency>
 
         <!-- Spark SQL 依赖-->
@@ -139,8 +140,6 @@
             <artifactId>spark-sql_2.12</artifactId>
             <version>${spark.version}</version>
         </dependency>
-
-
         <!--      <dependency>
                   <groupId>com.fasterxml.jackson.module</groupId>
                   <artifactId>jackson-module-scala_2.12</artifactId>
@@ -156,6 +155,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
         </dependency>
 
 <!--        <dependency>-->
@@ -168,12 +168,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.66</version>
         </dependency>
     </dependencies>
     <dependencyManagement>
@@ -191,79 +185,19 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
-                <configuration>
-                    <mainClass>czu.bigdata.flightAnalysis.FlightAnalysisApplication</mainClass>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>repackage</id>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-<!--            <plugin>-->
-<!--                <groupId>net.alchim31.maven</groupId>-->
-<!--                <artifactId>scala-maven-plugin</artifactId>-->
-<!--                <version>3.2.1</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>compile-scala</id>-->
-<!--                        <phase>compile</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>add-source</goal>-->
-<!--                            <goal>compile</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                    <execution>-->
-<!--                        <id>test-compile-scala</id>-->
-<!--                        <phase>test-compile</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>add-source</goal>-->
-<!--                            <goal>testCompile</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--                <configuration>-->
-<!--                    <recompileMode>incremental</recompileMode>-->
-<!--                    <scalaVersion>${scala.version}</scalaVersion>-->
-<!--                    <args>-->
-<!--                        <arg>-deprecation</arg>-->
-<!--                    </args>-->
-<!--                    <jvmArgs>-->
-<!--                        <jvmArg>-Xms64m</jvmArg>-->
-<!--                        <jvmArg>-Xmx1024m</jvmArg>-->
-<!--                    </jvmArgs>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-            <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>3.3.1</version>
-                <executions>
-                    <execution>
-                        <id>scala-compile-first</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <version>3.2.1</version>
                 <configuration>
+                    <recompileMode>incremental</recompileMode>
                     <scalaVersion>${scala.version}</scalaVersion>
+                    <args>
+                        <arg>-deprecation</arg>
+                    </args>
+                    <jvmArgs>
+                        <jvmArg>-Xms64m</jvmArg>
+                        <jvmArg>-Xmx1024m</jvmArg>
+                    </jvmArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -275,6 +209,23 @@
                     <target>1.8</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <configuration>
+                    <mainClass>czu.bigdata.flightAnalysis.FlightAnalysisApplication</mainClass>
+                    <skip>true</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
